@@ -60,3 +60,20 @@ def last(iterable,default=_marker):
 def nth_or_last(iterable, n, default=_marker):
     return last(islice(iterable, n+1), default)
     
+    
+def one(iterable,too_short=None,too_long=None):
+    it = iter(iterable)
+    try:
+        first_value = next(it)
+    except StopIteration as e:
+        raise ( 
+                too_short or ValueError("too few items in iterable expected 1")
+               ) from e
+    try:
+        second_value = next(it)
+    except StopIteration:
+        pass
+    else:
+        msg = (f"expected exactly one item in iterable, but got {first_value},{second_value} , and perhaps more.")
+        raise too_long or ValueError(msg)
+    return first_value
