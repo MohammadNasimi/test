@@ -121,3 +121,9 @@ def strictly_n(iterable,n,too_short= None, too_long=None):
     else:
         too_long(n+1)
         
+        
+def always_reversible(iterable):
+    try:
+        return reversed(iterable)
+    except TypeError:
+        return reversed(list(iterable))
