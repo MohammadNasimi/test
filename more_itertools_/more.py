@@ -56,5 +56,7 @@ def last(iterable,default=_marker):
                 raise ValueError('last() was called on an empty iterable') from e
             return default
         
-        
+
+def nth_or_last(iterable, n, default=_marker):
+    return last(islice(iterable, n+1), default)
     
