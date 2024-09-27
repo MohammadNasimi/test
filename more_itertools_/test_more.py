@@ -2,6 +2,8 @@ from unittest import TestCase
 from more import *
 import traceback
 
+from itertools import count
+
 class TakeTest(TestCase):
     
     def test_simple_take(self):
@@ -118,3 +120,35 @@ class NthOrLastTest(TestCase):
         
     def test_emptry(self):
         self.assertRaises(ValueError,lambda: nth_or_last(range(0),1))
+        
+
+class OneTest(TestCase):
+    def test_basic(self):
+        self.assertEqual(one(["hello"]),"hello")
+    
+    def test_too_short(self):
+        it = []
+        for too_short, exc_type in [
+            # (None,ValueError)
+            (IndexError,IndexError)   
+        ]:
+            with self.subTest(too_short):
+                try:
+                    one(it,too_short=too_short)
+                except exc_type:
+                    formated_exec = traceback.format_exc()
+                    self.assertIn("StopIteration", formated_exec)
+                    self.assertIn("The above exception was the direct cause", formated_exec)
+                else:
+                    self.fail()
+        
+    def test_too_long(self):
+        it = count()
+        self.assertRaises(ValueError,lambda: one(it))
+        self.assertEqual(next(it),2)
+        self.assertRaises(OverflowError,lambda: one(it,too_long=OverflowError))
+    
+    # def test_too_long_default_message(self):
+    #     it =[0,1]
+    #     self.assertRaises(ValueError,"expected exactly one item in iterable, but got 0,1 , and perhaps more.",lambda: one(it))
+    
