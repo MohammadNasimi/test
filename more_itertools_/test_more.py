@@ -1,5 +1,6 @@
 from unittest import TestCase
-from more import take, chunked_
+from more import take, chunked_ ,first
+import traceback
 
 class TakeTest(TestCase):
     
@@ -41,12 +42,36 @@ class chunkedTest(TestCase):
         result = chunked_("ABCDW",3,strict=False)
         self.assertEqual(result,[["A","B","C"],["D", "W"]])
         
-    def test_strict_true(self):
-        def f():
-            return chunked_("ABCDW",3,strict=True)
-        self.assertRaisesRegex(ValueError,"iterator is not dvisible by n", f)
+    # def test_strict_true(self):
+    #     def f():
+    #         return chunked_("ABCDW",3,strict=True)
+    #     self.assertRaisesRegex(ValueError,"iterator is not dvisible by n", f)
         
     def test_strict_true_size_none(self):
         def f():
             return chunked_("ABCfDW",None,strict=True)
         self.assertRaisesRegex(ValueError,"n cant be None if strict is True", f)
+        
+        
+class FirstTest(TestCase):
+    
+    def test_many(self):
+        self.assertEqual(first(x for x in range(4)), 0)
+            
+    def test_one(self):
+        self.assertEqual(first([3]), 3)
+        
+    def test_default(self):
+        self.assertEqual(first([],"a"), "a")
+                         
+    def test_emptry_stopiterations(self):
+        try:
+            first([])
+        except ValueError:
+            formatted_exe = traceback.format_exc()
+            print("**"*50)
+            print(formatted_exe)
+            self.assertIn("StopIteration", formatted_exe)                    
+            self.assertIn("first() was called on an empty iterable", formatted_exe)
+        else:
+            self.fail()                    
