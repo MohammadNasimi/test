@@ -2,7 +2,7 @@ from unittest import TestCase
 from more import *
 import traceback
 
-from itertools import count
+from itertools import count,cycle
 
 class TakeTest(TestCase):
     
@@ -152,7 +152,7 @@ class OneTest(TestCase):
     #     it =[0,1]
     #     self.assertRaises(ValueError,"expected exactly one item in iterable, but got 0,1 , and perhaps more.",lambda: one(it))
     
-class InterLeave(TestCase):
+class InterLeaveTest(TestCase):
     def test_even(self):
         actual = interleave([1,4,7],[2,5,8],[3,6,9])
         expected = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -169,4 +169,37 @@ class InterLeave(TestCase):
         it_inf = count()
         actual = interleave(it_list,it_str,it_inf)
         expected = ['a','1',0,'b','2',1,'c','3',2,'d','4',3]
+        self.assertEqual(actual, expected)
+
+
+class RepeatEachTest(TestCase):
+    def test_default(self):
+        actual = list(repeat_each("ABCD"))
+        expected = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D']
+        self.assertEqual(actual, expected)
+        
+    def test_basic(self):
+        actual = list(repeat_each("ABCD",3))
+        expected = ['A', 'A','A', 'B', 'B','B', 'C', 'C','C', 'D', 'D','D']
+        self.assertEqual(actual, expected)
+    
+    def test_empty(self):
+        actual = list(repeat_each(""))
+        expected = []
+        self.assertEqual(actual, expected)
+        
+    def test_no_repeat(self):
+        actual = list(repeat_each("ABC",0))
+        expected = []
+        self.assertEqual(actual, expected)
+        
+    def test_negative_repeat(self):
+        actual = list(repeat_each("ABC",-1))
+        expected = []
+        self.assertEqual(actual, expected)
+        
+    def test_infinitive_repeat(self):
+        repeater = repeat_each(cycle("AB"))
+        actual = take(repeater,6)
+        expected = ['A', 'A', 'B', 'B','A', 'A']
         self.assertEqual(actual, expected)
