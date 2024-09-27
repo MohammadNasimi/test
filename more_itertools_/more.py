@@ -1,4 +1,4 @@
-from itertools import islice
+from itertools import islice, chain 
 from functools import partial
 from more_itertools import chunked
 from collections.abc import Sequence
@@ -77,3 +77,9 @@ def one(iterable,too_short=None,too_long=None):
         msg = (f"expected exactly one item in iterable, but got {first_value},{second_value} , and perhaps more.")
         raise too_long or ValueError(msg)
     return first_value
+
+
+def interleave(*iterable):
+    return list(chain.from_iterable(zip(*iterable)))
+
+
