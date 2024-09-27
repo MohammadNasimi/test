@@ -1,4 +1,4 @@
-from itertools import islice, chain 
+from itertools import islice, chain ,repeat
 from functools import partial
 from more_itertools import chunked
 from collections.abc import Sequence
@@ -83,3 +83,7 @@ def interleave(*iterable):
     return list(chain.from_iterable(zip(*iterable)))
 
 
+def repeat_each(iterable, n=2):
+    return chain.from_iterable(map(repeat, iterable,repeat(n)))
+
+# print(list(repeat_each("ABCD")))
