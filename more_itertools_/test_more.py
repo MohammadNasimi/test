@@ -219,3 +219,32 @@ class Strictly_NTest(TestCase):
         n=5
         with self.assertRaises(ValueError) as e:
             list(strictly_n(iterable,n)) 
+            
+        self.assertEqual(
+            "Too few items in iterable got 4", e.exception.args[0]
+        )
+    def test_too_long(self):
+        iterable = ['a','b','c','d']
+        n=3
+        with self.assertRaises(ValueError) as e:
+            list(strictly_n(iterable,n)) 
+            
+        self.assertEqual(
+            "Too many items in iterable got 4", e.exception.args[0]
+        )
+        
+    def test_too_short_custom(self):
+        call_count = 0
+        def too_short(item_count):
+            nonlocal call_count # use call_count variable in function
+            call_count +=1
+        
+        iterable = ['a','b','c','d']
+        n=6
+        actual = []
+        
+        for item in strictly_n(iterable,n,too_short=too_short):
+            actual.append(item)
+        expected = ['a','b','c','d']
+        self.assertEqual(actual, expected)  
+        self.assertEqual(call_count, 1)  
