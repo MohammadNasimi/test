@@ -1,7 +1,8 @@
 from itertools import islice
 from functools import partial
-import traceback
 from more_itertools import chunked
+from collections.abc import Sequence
+from collections import deque
 
 list_ = [1,2,3,4,5,6,7]
 
@@ -40,3 +41,20 @@ def first(iterable,default=_marker):
     return default
 
 # print(first([]))
+
+def last(iterable,default=_marker):
+    try:
+        if isinstance(iterable,Sequence):
+            return iterable[-1]
+        elif hasattr(iterable,"__reversed__"):
+            return next(reversed(iterable))
+        else:
+            return deque(iterable,maxlen=1)[-1]
+        
+    except (IndexError,TypeError,StopIteration) as e:
+            if default is _marker:
+                raise ValueError('last() was called on an empty iterable') from e
+            return default
+        
+        
+    
