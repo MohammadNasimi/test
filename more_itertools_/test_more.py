@@ -203,3 +203,19 @@ class RepeatEachTest(TestCase):
         actual = take(repeater,6)
         expected = ['A', 'A', 'B', 'B','A', 'A']
         self.assertEqual(actual, expected)
+        
+        
+        
+class Strictly_NTest(TestCase):
+    def test_negative_repeat(self):
+        iterable = ['a','b','c','d']
+        n=4
+        actual = list(strictly_n(iterable,n))
+        expected = ['a','b','c','d']
+        self.assertEqual(actual, expected)  
+        
+    def test_too_short(self):
+        iterable = ['a','b','c','d']
+        n=5
+        with self.assertRaises(ValueError) as e:
+            list(strictly_n(iterable,n)) 
