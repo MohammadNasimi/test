@@ -1,5 +1,5 @@
 from unittest import TestCase
-from more import take, chunked_ ,first, last
+from more import *
 import traceback
 
 class TakeTest(TestCase):
@@ -106,3 +106,15 @@ class LastTests(TestCase):
                 with self.assertRaises(ValueError):
                     last(iterable)   
             
+            
+class NthOrLastTest(TestCase):
+    def test_basic(self):
+        self.assertEqual(nth_or_last(range(3), 1),1)
+        self.assertEqual(nth_or_last(range(3), 3),2) # [0, 1, 2]
+    
+    def test_default(self):
+        default = 42
+        self.assertEqual(nth_or_last(range(0),3,default),default)
+        
+    def test_emptry(self):
+        self.assertRaises(ValueError,lambda: nth_or_last(range(0),1))
