@@ -260,3 +260,15 @@ class AlwaysRerviersibleTest(TestCase):
         self.assertEqual(list(reversed(range(10))),list(always_reversible(x for x in range(10))))
         self.assertEqual(list(reversed([1,2,3])),list(always_reversible(x for x in [1,2,3])))
         self.assertEqual(reversed([1,2,3]).__class__,always_reversible(x for x in [1,2,3]).__class__)
+        
+class SplitAfterTest(TestCase):
+    def test_start_with_sep(self):
+        actual = list(split_after('xooxoo',lambda c: c=="x"))
+        expected = [['x'], ['o','o','x'], ['o','o']]
+        self.assertEqual(actual, expected)
+        
+    def test_no_sep(self):
+        actual = list(split_after('oooo',lambda c: c=="x"))
+        expected = [['o','o','o','o']]
+        self.assertEqual(actual, expected)
+                
