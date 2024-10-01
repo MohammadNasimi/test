@@ -271,4 +271,75 @@ class SplitAfterTest(TestCase):
         actual = list(split_after('oooo',lambda c: c=="x"))
         expected = [['o','o','o','o']]
         self.assertEqual(actual, expected)
-                
+
+class SplitIntoTest(TestCase):
+    def test_iterable_just_right(self):
+        iterable = [1,2,3,4,5,6,7,8,9]
+        sizes = [2,3,4]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7,8,9]]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_too_small(self):
+        iterable = [1,2,3,4,5,6,7]
+        sizes = [2,3,4]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7]]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_too_small_extra(self):
+        iterable = [1,2,3,4,5,6,7]
+        sizes = [2,3,4,5]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7], []]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_too_large(self):
+        iterable = [1,2,3,4,5,6,7,8,9]
+        sizes = [2,3,2]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7]]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_too_small_extra(self):
+        iterable = [1,2,3,4,5,6,7,8,9]
+        sizes = [2,3,None]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7,8,9]]
+        self.assertEqual(actual, expected)
+        
+        
+    def test_iterable_none_mid_sizes(self):
+        iterable = [1,2,3,4,5,6,7,8,9]
+        sizes = [2,3,None,3]
+        actual = list(split_into(iterable,sizes))
+        expected = [[1,2], [3,4,5], [6,7,8,9]]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_empty(self):
+        iterable = []
+        sizes = [2,3,3]
+        actual = list(split_into(iterable,sizes))
+        expected = [[], [], []]
+        self.assertEqual(actual, expected)
+        
+    def test_iterable_emoty_using_none(self):
+        iterable = []
+        sizes = [2,3,None,3]
+        actual = list(split_into(iterable,sizes))
+        expected = [[], [], []]
+        self.assertEqual(actual, expected)
+        
+    def test_sizes_empty(self):
+        iterable = [1,2,3,4,5,6,7,8,9]
+        sizes = []
+        actual = list(split_into(iterable,sizes))
+        expected = []
+        self.assertEqual(actual, expected)
+        
+    def test_both_empty(self):
+        iterable = []
+        sizes = []
+        actual = list(split_into(iterable,sizes))
+        expected = []
+        self.assertEqual(actual, expected)
