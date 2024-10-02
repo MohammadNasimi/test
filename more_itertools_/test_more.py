@@ -372,3 +372,10 @@ class TimeLimitedTests(TestCase):
         actual = list(iterable)
         expected = [1,2]
         self.assertEqual(actual,expected)
+        
+        
+class SequenceView(TestCase):
+    def test_init(self):
+        view = SequenceView([1,2,3])
+        self.assertEqual(repr(view),"SequenceView((1,2,3))")
+        self.assertRaises(TypeError , lambda : SequenceView({}))
