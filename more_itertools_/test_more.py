@@ -1,7 +1,7 @@
 from unittest import TestCase
 from more import *
 import traceback
-
+from time import sleep
 from itertools import count,cycle
 
 class TakeTest(TestCase):
@@ -358,3 +358,17 @@ class MapIfTest(TestCase):
         actual = list(map_if(iterable,lambda x: x>=0,lambda x: "notneg",lambda x:'neg'))
         expected = ['neg','neg','neg','neg','neg',"notneg","notneg","notneg","notneg","notneg"]
         self.assertEqual(actual, expected)
+        
+        
+class TimeLimitedTests(TestCase):
+    def test_basic(self):
+        def generator():
+            yield 1
+            yield 2
+            sleep(0.2)
+            yield 3
+            
+        iterable = time_limited(0.1,generator())
+        actual = list(iterable)
+        expected = [1,2]
+        self.assertEqual(actual,expected)
