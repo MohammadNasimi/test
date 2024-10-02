@@ -3,6 +3,8 @@ from functools import partial
 from more_itertools import chunked
 from collections.abc import Sequence
 from collections import deque
+from time import monotonic
+
 
 list_ = [1,2,3,4,5,6,7]
 
@@ -175,3 +177,13 @@ def split_into(iterable,sizes):
 def map_if(iterable,pred,func,func_else=lambda x:x):
     for item in iterable:
         yield func(item) if pred(item) else func_else(item)
+
+
+class time_limited:
+    def __init__(self,limit_seconds,iterable):
+        if limit_seconds <0:
+            return ValueError("limit seconds must be positive")
+        self.limit_seconds = limit_seconds
+        self._iterable = iter(iterable)
+        self._start_time = monotonic()
+        self.timed_out = False
