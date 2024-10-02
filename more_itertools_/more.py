@@ -187,3 +187,13 @@ class time_limited:
         self._iterable = iter(iterable)
         self._start_time = monotonic()
         self.timed_out = False
+        
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        item = next(self._iterable)
+        if monotonic() - self._start_time > self.limit_seconds:
+            self.timed_out = True
+            raise StopIteration
+        return item  
