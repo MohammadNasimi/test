@@ -343,3 +343,18 @@ class SplitIntoTest(TestCase):
         actual = list(split_into(iterable,sizes))
         expected = []
         self.assertEqual(actual, expected)
+        
+        
+
+class MapIfTest(TestCase):
+    def test_with_out_func_else(self):
+        iterable = list(range(-5,5))
+        actual = list(map_if(iterable,lambda x: x>3,lambda x: "TooBig"))
+        expected = [-5,-4,-3,-2,-1,0,1,2,3,"TooBig"]
+        self.assertEqual(actual, expected)
+        
+    def test_with_func_else(self):
+        iterable = list(range(-5,5))
+        actual = list(map_if(iterable,lambda x: x>=0,lambda x: "notneg",lambda x:'neg'))
+        expected = ['neg','neg','neg','neg','neg',"notneg","notneg","notneg","notneg","notneg"]
+        self.assertEqual(actual, expected)
